@@ -39,6 +39,11 @@ lspconfig["pyright"].setup({
 	on_attach = on_attach,
 })
 
+lspconfig["tsserver"].setup({
+	capabilities = capabilities,
+	on_attach = on_attach,
+})
+
 -- configure lua server (with special settings)
 lspconfig["sumneko_lua"].setup({
 	capabilities = capabilities,
