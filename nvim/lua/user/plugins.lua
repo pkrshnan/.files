@@ -5,9 +5,15 @@ local plugins = {
 	["wbthomason/packer.nvim"] = {},
 	
 	-- Theme
-	["sam4llis/nvim-tundra"] = {
+	-- ["sam4llis/nvim-tundra"] = {
+	-- 	config = function()
+	-- 		require("plugins.tundra")
+	-- 	end,
+	-- },
+	["catppuccin/nvim"] = {
+		as = 'catppuccin',
 		config = function()
-			require("plugins.tundra")
+			require("plugins.catppuccin")
 		end,
 	},
 
@@ -16,9 +22,9 @@ local plugins = {
 
 	-- Help with keymappings
 	["folke/which-key.nvim"] = {
-		-- config = function()
-		-- 	require("plugins.whichkey")
-		-- end,
+		config = function()
+			require("plugins.whichkey")
+		end,
 	},
 
 	-- Icons
@@ -58,9 +64,9 @@ local plugins = {
 
 	-- Commenting
 	["numToStr/Comment.nvim"] = {
-		-- config = function()
-		-- 	require("plugins.comment")
-		-- end,
+		config = function()
+		 	require("plugins.comment")
+		 end,
 	},
 
 	-- LSP Configuration
@@ -100,6 +106,25 @@ local plugins = {
 
 	-- Impatient optimize the startup time
 	["lewis6991/impatient.nvim"] = {},
+
+	-- For latex editing
+	["lervag/vimtex"] = {
+		config = function()
+			require("plugins.vimtex")
+		end,
+	},
+
+	-- Snippets
+	["L3MON4D3/LuaSnip"] = {},
+	["saadparwaiz1/cmp_luasnip"] = {},
+	["rafamadriz/friendly-snippets"] = {},
+
+	-- Todo Comments
+	["folke/todo-comments.nvim"] = {
+		config = function()
+			require("plugins.todo")
+		end,
+	}
 }
 
 -- Parts below taken from: https://github.com/arturgoms/nvim/blob/main/lua/user/plugins.lua

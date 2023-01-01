@@ -8,7 +8,14 @@ if not lspkind_status_ok then
 	return
 end
 
+local luasnip_status_ok, luasnip = pcall(require, "luasnip")
+if not luasnip_status_ok then
+	return
+end
+
 local compare = require("cmp.config.compare")
+
+require('luasnip/loaders/from_vscode').lazy_load()
 
 local check_backspace = function()
 	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -22,6 +29,11 @@ vim.api.nvim_set_hl(0, "CmpItemKindEmoji", { fg = "#FDE030" })
 vim.api.nvim_set_hl(0, "CmpItemKindCrate", { fg = "#F64D00" })
 
 cmp.setup({
+	snippet = {
+		expand = function(args)
+			luasnip.lsp_expand(args.body)
+		end,
+	},
 	mapping = cmp.mapping.preset.insert({
 		["<C-k>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" }),
 		["<C-j>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" }),
@@ -40,9 +52,13 @@ cmp.setup({
 		["<Tab>"] = cmp.mapping(function(fallback)
 			if cmp.visible() then
 				cmp.select_next_item()
+			elseif luasnip.jumpable(1) then
+				luasnip.jump(1)
+			elseif luasnip.expand_or_jumpable() then
+				luasnip.expand_or_jump()
 			elseif check_backspace() then
-				-- cmp.complete()
-				fallback()
+				cmp.complete()
+				-- fallback()
 			else
 				fallback()
 			end
@@ -53,6 +69,8 @@ cmp.setup({
 		["<S-Tab>"] = cmp.mapping(function(fallback)
 			if cmp.visible() then
 				cmp.select_prev_item()
+			elseif luasnip.jumpable(-1) then
+				luasnip.jump(-1)
 			else
 				fallback()
 			end
@@ -72,6 +90,7 @@ cmp.setup({
 		{ name = "crates", group_index = 1 },
 		{ name = "nvim_lsp", group_index = 2 },
 		{ name = "nvim_lua", group_index = 2 },
+		{ name = "luasnip", group_index = 2 },
 		{ name = "buffer", group_index = 2 },
 		{ name = "cmp_tabnine", group_index = 2 },
 		{ name = "path", group_index = 2 },

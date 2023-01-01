@@ -35,9 +35,18 @@ nmap("<leader>Y", '"+Y')
 -- keymap("n", "<C-k>", ":bprevious<CR>", opts)
 keymap("n", "<leader>d", ":bdelete<CR>", opts)
 
-keymap(
-	"n",
-	"<C-p>",
-	"<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{previewer = false})<cr>",
-	opts
-)
+-- We use whichkey to define keybinds
+local status_ok, whichkey = pcall(require, "which-key")
+if not status_ok then
+  return
+end
+
+whichkey.register({
+	f = {
+		name = "file", -- optional group name
+		-- Find files with 
+		f = { "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{previewer = false})<cr>", "Find File" },
+		o = { "<cmd>lua require('telescope.builtin').oldfiles(require('telescope.themes').get_dropdown{previewer = false})<cr>", "Open Recent File" },
+		['/'] = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "Open Recent File" },
+  },
+}, { prefix = "<leader>" })
